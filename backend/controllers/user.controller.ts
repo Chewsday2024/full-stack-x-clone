@@ -26,7 +26,6 @@ export const getUserProfile = async (req: Request, res: Response) => {
 }
 
 
-
 export const followUnfollowUser = async (req: Request, res: Response) => {
   try {
     const { id } = req.params
@@ -77,8 +76,6 @@ export const followUnfollowUser = async (req: Request, res: Response) => {
   }
 }
 
-
-
 export const getSuggestedUsers = async (req: Request, res: Response) => {
   try {
     const userId = req.user?._id
@@ -106,7 +103,6 @@ export const getSuggestedUsers = async (req: Request, res: Response) => {
     return
   }
 }
-
 
 
 export const updateUser = async (req: Request, res: Response) => {
@@ -148,6 +144,8 @@ export const updateUser = async (req: Request, res: Response) => {
 
     if (profileImg) {
       if (user.profileImg) {
+        //  https://res.cloudinary.com/dkcdkuetg/image/upload/v1746019829/lffxlgomov9oslfv2f2d.jpg
+
         await cloudinary.uploader.destroy(user.profileImg.split('/').slice(7).join('/').split('.')[0])
       }
 
@@ -182,7 +180,9 @@ export const updateUser = async (req: Request, res: Response) => {
 
     res.status(200).json(user)
     return
-  } catch (error) {
-    
+  } catch (error: any) {
+    console.log('Error in updateUser: ', error.message)
+    res.status(500).json({ error: error.message })
+    return
   }
 }

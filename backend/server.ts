@@ -6,6 +6,7 @@ import dotenv from 'dotenv'
 
 import authRoutes from './routes/auth.routes'
 import userRoutes from './routes/user.routes'
+import postRoutes from './routes/post.routes'
 
 import connectMongoDB from './db/connectMongoDB'
 
@@ -31,6 +32,7 @@ app.use(cookieParser())
 
 app.use('/api/auth', authRoutes)
 app.use('/api/users', userRoutes)
+app.use('/api/posts', postRoutes)
 
 
 
