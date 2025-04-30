@@ -8,7 +8,7 @@ import { generateTokenAndSetCookie } from "../lib/utils/generateToken";
 
 export const signup = async (req: Request, res: Response) => {
   try {
-    const { fullName, username, email, password }: mongoUserType = req.body
+    const { fullName, username, email, password } = req.body
 
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
     if (!emailRegex.test(email)) {
