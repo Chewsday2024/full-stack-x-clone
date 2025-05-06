@@ -1,25 +1,43 @@
-import { useQuery } from "@tanstack/react-query";
-import { useEffect } from "react";
-import PostSkeleton from "../skeletons/PostSkeleton";
-import Post from "./Post";
+import { useQuery } from "@tanstack/react-query"
+import { useEffect } from "react"
 
-function Posts({ feedType, username, userId }: { feedType: string }) {
+
+import PostSkeleton from "../skeletons/PostSkeleton"
+import Post from "./Post"
+import { PostType } from "../../types/PostType"
+import postsQueryOption from "../../utils/queryoptions/postsQueryOption"
+
+
+
+type Props = {
+  feedType?: string
+  username?: string
+  userId?: string
+}
+
+
+
+function Posts({ feedType, username, userId }: Props) {
   const getPostEndpoint = () => {
     switch (feedType) {
       case "forYou":
-        return "/api/posts/all";
-      case "following":
-        return "/api/posts/following";
-      case "posts":
-        return `/api/posts/user/${username}`;
-      case "likes":
-        return `/api/posts/likes/${userId}`;
-      default:
-        return "/api/posts/all";
-    }
-  };
+        return "/api/posts/all"
 
-  const POST_ENDPOINT = getPostEndpoint();
+      case "following":
+        return "/api/posts/following"
+
+      case "posts":
+        return `/api/posts/user/${username}`
+
+      case "likes":
+        return `/api/posts/likes/${userId}`
+
+      default:
+        return "/api/posts/all"
+    }
+  }
+
+  const POST_ENDPOINT = getPostEndpoint()
 
   const {
     data: posts,
@@ -27,26 +45,16 @@ function Posts({ feedType, username, userId }: { feedType: string }) {
     refetch,
     isRefetching,
   } = useQuery({
-    queryKey: ["posts"],
-    queryFn: async () => {
-      try {
-        const res = await fetch(POST_ENDPOINT);
-        const data = await res.json();
+    queryKey: ["posts", POST_ENDPOINT],
+    queryFn: () => postsQueryOption(POST_ENDPOINT),
+  })
 
-        if (!res.ok) {
-          throw new Error(data.error || "Something went wrong");
-        }
-
-        return data;
-      } catch (error) {
-        throw new Error(error);
-      }
-    },
-  });
 
   useEffect(() => {
     refetch();
-  }, [feedType, refetch, username]);
+  }, [feedType, refetch, username])
+
+
   return (
 		<>
 			{(isLoading || isRefetching) && (
@@ -56,12 +64,14 @@ function Posts({ feedType, username, userId }: { feedType: string }) {
 					<PostSkeleton />
 				</div>
 			)}
+
 			{!isLoading && !isRefetching && posts?.length === 0 && (
 				<p className='text-center my-4'>No posts in this tab. Switch 👻</p>
 			)}
+      
 			{!isLoading && !isRefetching && posts && (
 				<div>
-					{posts.map((post) => (
+					{posts.map((post: PostType) => (
 						<Post key={post._id} post={post} />
 					))}
 				</div>

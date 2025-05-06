@@ -8,7 +8,13 @@
   --color-secondary: rgb(24, 24, 24);
 }
 
+@layer utilities {
+  input:-webkit-autofill {
+    box-shadow: 0 0 0 1000px black inset !important;
+    -webkit-text-fill-color: white !important;
+  }
+}
 
-[data-theme="black"] {
-  
+html {
+  overflow-y: scroll;
 }

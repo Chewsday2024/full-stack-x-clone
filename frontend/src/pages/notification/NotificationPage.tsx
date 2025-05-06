@@ -1,48 +1,63 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import toast from "react-hot-toast";
-import { FaHeart, FaUser } from "react-icons/fa";
-import { IoSettingsOutline } from "react-icons/io5";
-import { Link } from "react-router-dom";
-import LoadingSpinner from "../../components/common/LoadingSpinner";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { Link } from "react-router-dom"
+import toast from "react-hot-toast"
+
+
+import { FaHeart, FaUser } from "react-icons/fa"
+import { IoSettingsOutline } from "react-icons/io5"
+
+
+import notificationQueryOption from "../../utils/queryoptions/notificationQueryOption"
+import LoadingSpinner from "../../components/common/LoadingSpinner"
+import { UserType } from "../../types/UserType"
+
+
+
+type Notification = {
+  _id: string
+  type: string
+  from: UserType
+}
+
+
 
 function NotificationPage() {
-  const queryClient = useQueryClient();
+  const queryClient = useQueryClient()
+
   const { data: notifications, isLoading } = useQuery({
     queryKey: ["notifications"],
-    queryFn: async () => {
-      try {
-        const res = await fetch("/api/notifications");
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.error || "Something went wrong");
-        return data;
-      } catch (error) {
-        throw new Error(error);
-      }
-    },
-  });
+    queryFn: notificationQueryOption
+  })
 
   const { mutate: deleteNotifications } = useMutation({
     mutationFn: async () => {
       try {
-        const res = await fetch("/api/notifications", {
-          method: "DELETE",
-        });
-        const data = await res.json();
+        const res = await fetch('/api/notifications', {
+          method: 'DELETE',
+        })
 
-        if (!res.ok) throw new Error(data.error || "Something went wrong");
-        return data;
+        const data = await res.json()
+
+        if (!res.ok) throw new Error(data.error || "Something went wrong")
+
+        return data
       } catch (error) {
-        throw new Error(error);
+        if (error && error === 'string') {
+          throw new Error(error)
+        } else {
+          throw error
+        }
       }
     },
     onSuccess: () => {
-      toast.success("Notifications deleted successfully");
-      queryClient.invalidateQueries({ queryKey: ["notifications"] });
+      toast.success("Notifications deleted successfully")
+
+      queryClient.invalidateQueries({ queryKey: ["notifications"] })
     },
     onError: (error) => {
-      toast.error(error.message);
-    },
-  });
+      toast.error(error.message)
+    }
+  })
   
   return (
     <>
@@ -58,7 +73,7 @@ function NotificationPage() {
               className='dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52'
             >
               <li>
-                <a onClick={deleteNotifications}>Delete all notifications</a>
+                <a onClick={() => deleteNotifications()}>Delete all notifications</a>
               </li>
             </ul>
           </div>
@@ -69,7 +84,7 @@ function NotificationPage() {
           </div>
         )}
         {notifications?.length === 0 && <div className='text-center p-4 font-bold'>No notifications 🤔</div>}
-        {notifications?.map((notification) => (
+        {notifications?.map(( notification: Notification ) => (
           <div className='border-b border-gray-700' key={notification._id}>
             <div className='flex gap-2 p-4'>
               {notification.type === "follow" && <FaUser className='w-7 h-7 text-primary' />}

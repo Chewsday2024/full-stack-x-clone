@@ -1,6 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react"
 
-function EditProfileModal({ authUser }) {
+import useUpdateUserProfile from "../../hooks/useUpdateUserProfile"
+
+import { UserType } from "../../types/UserType"
+
+
+function EditProfileModal({ authUser }: { authUser: UserType }) {
   const [formData, setFormData] = useState({
     fullName: "",
     username: "",
@@ -8,14 +13,25 @@ function EditProfileModal({ authUser }) {
     bio: "",
     link: "",
     newPassword: "",
-    currentPassword: "",
-  });
+    currentPassword: ""
+  })
+
+
+
+	const dialogRef = useRef<HTMLDialogElement>(null)
+
+	const openDialog = () => {
+		dialogRef.current?.showModal()
+	}
+
+
+
 
   const { updateProfile, isUpdatingProfile } = useUpdateUserProfile();
 
-  const handleInputChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+  const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value })
+  }
 
   useEffect(() => {
     if (authUser) {
@@ -26,26 +42,29 @@ function EditProfileModal({ authUser }) {
         bio: authUser.bio,
         link: authUser.link,
         newPassword: "",
-        currentPassword: "",
-      });
+        currentPassword: ""
+      })
     }
-  }, [authUser]);
+  }, [authUser])
+
+
   return (
 		<>
 			<button
 				className='btn btn-outline rounded-full btn-sm'
-				onClick={() => document.getElementById("edit_profile_modal").showModal()}
+				onClick={() => openDialog()}
 			>
 				Edit profile
 			</button>
-			<dialog id='edit_profile_modal' className='modal'>
+			<dialog ref={dialogRef}  className='modal'>
 				<div className='modal-box border rounded-md border-gray-700 shadow-md'>
 					<h3 className='font-bold text-lg my-3'>Update Profile</h3>
 					<form
 						className='flex flex-col gap-4'
 						onSubmit={(e) => {
-							e.preventDefault();
-							updateProfile(formData);
+							e.preventDefault()
+
+							updateProfile(formData)
 						}}
 					>
 						<div className='flex flex-wrap gap-2'>

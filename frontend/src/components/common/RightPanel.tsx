@@ -1,27 +1,43 @@
-import { useQuery } from "@tanstack/react-query";
-import { Link } from "react-router-dom";
-import RightPanelSkeleton from "../skeletons/RightPanelSkeleton";
+import { useQuery } from "@tanstack/react-query"
+import { Link } from "react-router-dom"
+
+
+import RightPanelSkeleton from "../skeletons/RightPanelSkeleton"
+import LoadingSpinner from "./LoadingSpinner"
+
+
+import useFollow from "../../hooks/useFollow"
+import { UserType } from "../../types/UserType"
+
+
 
 function RightPanel() {
   const { data: suggestedUsers, isLoading } = useQuery({
       queryKey: ["suggestedUsers"],
       queryFn: async () => {
         try {
-          const res = await fetch("/api/users/suggested");
-          const data = await res.json();
+          const res = await fetch("/api/users/suggested")
+
+          const data = await res.json()
+          
           if (!res.ok) {
-            throw new Error(data.error || "Something went wrong!");
+            throw new Error(data.error || "Something went wrong!")
           }
-          return data;
+
+          return data
         } catch (error) {
-          throw new Error(error.message)
+          if (error && error === 'string') {
+            throw new Error(error)
+          } else {
+            throw error
+          }
         }
       },
     })
   
     const { follow, isPending } = useFollow()
   
-    if (suggestedUsers?.length === 0) return <div className='md:w-64 w-0'></div>
+    if (suggestedUsers?.length === 0) return <div className='md:w-64 w-0' />
 
   return (
     <div className='hidden lg:block my-4 mx-2'>
@@ -38,7 +54,7 @@ function RightPanel() {
             </>
           )}
           {!isLoading &&
-            suggestedUsers?.map((user) => (
+            suggestedUsers?.map((user: UserType) => (
               <Link
                 to={`/profile/${user.username}`}
                 className='flex items-center justify-between gap-4'
@@ -61,8 +77,9 @@ function RightPanel() {
                   <button
                     className='btn bg-white text-black hover:bg-white hover:opacity-90 rounded-full btn-sm'
                     onClick={(e) => {
-                      e.preventDefault();
-                      follow(user._id);
+                      e.preventDefault()
+                      
+                      if (user._id) follow(user._id)
                     }}
                   >
                     {isPending ? <LoadingSpinner size='sm' /> : "Follow"}

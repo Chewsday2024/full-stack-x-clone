@@ -10,50 +10,55 @@ import { FaUser } from "react-icons/fa"
 
 
 import XSvg from "../svgs/X"
+import { UserType } from "../../types/UserType"
+import authUserQueryOption from "../../utils/queryoptions/authUserQueryOption"
+
 
 
 
 function Sidebar() {
-  const queryClient = useQueryClient();
+  const queryClient = useQueryClient()
+
   const { mutate: logout } = useMutation({
     mutationFn: async () => {
       try {
-        const res = await fetch("/api/auth/logout", {
-          method: "POST",
-        });
-        const data = await res.json();
+        const res = await fetch('/api/auth/logout', {
+          method: 'POST',
+        })
+
+        const data = await res.json()
 
         if (!res.ok) {
-          throw new Error(data.error || "Something went wrong");
+          throw new Error(data.error || 'Something went wrong')
         }
       } catch (error) {
-        if (error && error === 'string') throw new Error(error);
+        if (error && error === 'string') {
+          throw new Error(error)
+        } else {
+          throw error
+        }
       }
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["authUser"] });
+      queryClient.invalidateQueries({ queryKey: ['authUser'] })
     },
     onError: () => {
-      toast.error("Logout failed");
+      toast.error('Logout failed')
     },
   })
 
 
-  type AuthUser = {
-    username: string,
-    fullName: string,
-    profileImg: string
-  }
   
-  const { data: authUser } = useQuery<AuthUser>({ queryKey: ["authUser"] })
+  const { data: authUser } = useQuery<UserType>({ queryKey: ['authUser'], queryFn: authUserQueryOption })
 
-
+  
   return (
     <div className='md:flex-[2_2_0] w-18 max-w-52'>
       <div className='sticky top-0 left-0 h-screen flex flex-col border-r border-gray-700 w-20 md:w-full'>
         <Link to='/' className='flex justify-center md:justify-start'>
           <XSvg className='px-2 w-12 h-12 rounded-full fill-white hover:bg-stone-900' />
         </Link>
+
         <ul className='flex flex-col gap-3 mt-4'>
           <li className='flex justify-center md:justify-start'>
             <Link
@@ -84,6 +89,7 @@ function Sidebar() {
             </Link>
           </li>
         </ul>
+
         {authUser && (
           <Link
             to={`/profile/${authUser.username}`}
@@ -94,16 +100,20 @@ function Sidebar() {
                 <img src={authUser?.profileImg || "/avatar-placeholder.png"} />
               </div>
             </div>
+
             <div className='flex justify-between flex-1'>
               <div className='hidden md:block'>
                 <p className='text-white font-bold text-sm w-20 truncate'>{authUser?.fullName}</p>
+
                 <p className='text-slate-500 text-sm'>@{authUser?.username}</p>
               </div>
+
               <BiLogOut
                 className='w-5 h-5 cursor-pointer'
                 onClick={(e) => {
-                  e.preventDefault();
-                  logout();
+                  e.preventDefault()
+
+                  logout()
                 }}
               />
             </div>

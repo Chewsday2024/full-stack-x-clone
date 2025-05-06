@@ -4,11 +4,35 @@ import toast from 'react-hot-toast'
 import { useState } from "react"
 
 
-import { FaUser } from "react-icons/fa"
 import { MdDriveFileRenameOutline, MdOutlineMail, MdPassword } from "react-icons/md"
+import { FaUser } from "react-icons/fa"
 
 
 import XSvg from "../../../components/svgs/X"
+
+
+
+type SignupInput = {
+  email: string
+  username: string
+  fullName: string
+  password: string
+}
+
+
+
+type SignupResponse = {
+  message: string
+  user: {
+    id: string
+    email: string
+    username: string
+  }
+}
+
+
+
+
 
 function SignUpPage() {
   const [formData, setFormData] = useState<SignupInput>({
@@ -16,26 +40,9 @@ function SignUpPage() {
     username: "",
     fullName: "",
     password: "",
-  });
+  })
 
-
-  type SignupInput = {
-    email: string;
-    username: string;
-    fullName: string;
-    password: string;
-  };
-  
-  type SignupResponse = {
-    message: string;
-    user: {
-      id: string;
-      email: string;
-      username: string;
-    };
-  };
-
-  const queryClient = useQueryClient();
+  const queryClient = useQueryClient()
 
   const { mutate, isError, isPending, error } = useMutation<SignupResponse, Error, SignupInput>({
     mutationFn: async ({ email, username, fullName, password }) => {
@@ -45,16 +52,19 @@ function SignUpPage() {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ email, username, fullName, password }),
-        });
+          body: JSON.stringify({ email, username, fullName, password })
+        })
+        
+        const data = await res.json()
 
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.error || "Failed to create account");
-        console.log(data);
-        return data;
+        if (!res.ok) throw new Error(data.error || 'Failed to create account')
+          
+        console.log(data)
+
+        return data
       } catch (error) {
-        console.error(error);
-        throw error;
+        console.error(error)
+        throw error
       }
     },
     onSuccess: () => {
@@ -63,18 +73,19 @@ function SignUpPage() {
       {
         /* Added this line below, after recording the video. I forgot to add this while recording, sorry, thx. */
       }
-      queryClient.invalidateQueries({ queryKey: ["authUser"] });
-    },
-  });
+      queryClient.invalidateQueries({ queryKey: ["authUser"] })
+    }
+  })
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault(); // page won't reload
-    mutate(formData);
-  };
+    e.preventDefault() 
+
+    mutate(formData)
+  }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+    setFormData({ ...formData, [e.target.name]: e.target.value })
+  }
 
   
 

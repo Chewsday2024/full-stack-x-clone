@@ -1,62 +1,75 @@
 import { MdOutlineMail, MdPassword } from "react-icons/md"
 import XSvg from "../../../components/svgs/X"
-import { useState } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Link } from "react-router-dom";
+import { useState } from "react"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { Link } from "react-router-dom"
+
+
+
+
+
+
+type LoginInput = {
+  username: string
+  password: string
+}
+
+
+
 
 function LoginPage() {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<LoginInput>({
     username: "",
     password: "",
-  });
+  })
 
 
-  type LoginInput = {
-    username: string;
-    password: string;
-  };
 
-  const queryClient = useQueryClient();
+  const queryClient = useQueryClient()
 
   const {
     mutate: loginMutation,
     isPending,
     isError,
-    error,
+    error
   } = useMutation<void, Error, LoginInput>({
     mutationFn: async ({ username, password }) => {
       try {
-        const res = await fetch("/api/auth/login", {
+        const res = await fetch('/api/auth/login', {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ username, password }),
+          body: JSON.stringify({ username, password })
         });
 
-        const data = await res.json();
+        const data = await res.json()
 
         if (!res.ok) {
-          throw new Error(data.error || "Something went wrong");
+          throw new Error(data.error || "Something went wrong")
         }
       } catch (error) {
-        if (typeof error === 'string') throw new Error(error)
+        if (typeof error === 'string') {
+          throw new Error(error)
+        } else {
+          throw error
+        }
       }
     },
     onSuccess: () => {
       // refetch the authUser
-      queryClient.invalidateQueries({ queryKey: ["authUser"] });
-    },
-  });
+      queryClient.invalidateQueries({ queryKey: ["authUser"] })
+    }
+  })
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    loginMutation(formData);
-  };
+    e.preventDefault()
+    loginMutation(formData)
+  }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+    setFormData({ ...formData, [e.target.name]: e.target.value })
+  }
 
 
 
@@ -76,6 +89,7 @@ function LoginPage() {
 
           <label className='input input-bordered rounded flex items-center gap-2'>
             <MdOutlineMail />
+
             <input
               type='text'
               className='grow'
