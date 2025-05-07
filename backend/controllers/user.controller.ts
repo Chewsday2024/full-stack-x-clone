@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import User from "../models/user.model";
-import Notification from "../models/notification.model";
+import User from "../models/user.model.js";
+import Notification from "../models/notification.model.js";
 import bcrypt from 'bcryptjs'
 import { v2 as cloudinary } from "cloudinary";
 // import mongoose from "mongoose";

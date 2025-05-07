@@ -5,12 +5,12 @@ import dotenv from 'dotenv'
 import path from 'path'
 
 
-import authRoutes from './routes/auth.routes'
-import userRoutes from './routes/user.routes'
-import postRoutes from './routes/post.routes'
-import notificationRoutes from './routes/notification.routes'
+import authRoutes from './routes/auth.routes.js'
+import userRoutes from './routes/user.routes.js'
+import postRoutes from './routes/post.routes.js'
+import notificationRoutes from './routes/notification.routes.js'
 
-import connectMongoDB from './db/connectMongoDB'
+import connectMongoDB from './db/connectMongoDB.js'
 
 
 dotenv.config()

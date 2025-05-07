@@ -1,5 +1,5 @@
 import express from 'express'
-import { protectRoute } from '../middleware/protectRoute'
+import { protectRoute } from '../middleware/protectRoute.js'
 import {
   commentOnPost,
   createPost,
@@ -9,7 +9,7 @@ import {
   getLikedPosts,
   getUserPosts,
   likeUnlikePost
-} from '../controllers/post.controller'
+} from '../controllers/post.controller.js'
 
 
 

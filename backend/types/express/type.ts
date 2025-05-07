@@ -1,4 +1,4 @@
-import { mongoUserType } from "../../models/user.model";
+import { mongoUserType } from "../../models/user.model.js";
 
 declare global {
   namespace Express {

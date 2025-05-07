@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
-import User from "../models/user.model";
-import Post from "../models/post.model";
+import User from "../models/user.model.js";
+import Post from "../models/post.model.js";
 import { v2 as cloudinary } from "cloudinary";
-import Notification from "../models/notification.model";
+import Notification from "../models/notification.model.js";
 
 
 

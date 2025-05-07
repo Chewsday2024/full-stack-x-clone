@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import Notification from "../models/notification.model";
+import Notification from "../models/notification.model.js";
 
 
 

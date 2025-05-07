@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import bcrypt from 'bcryptjs'
-import User, { mongoUserType } from "../models/user.model";
-import { generateTokenAndSetCookie } from "../lib/utils/generateToken";
+import User, { mongoUserType } from "../models/user.model.js";
+import { generateTokenAndSetCookie } from "../lib/utils/generateToken.js";
 
 
 

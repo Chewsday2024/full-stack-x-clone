@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import jwt from 'jsonwebtoken'
-import User from "../models/user.model";
-import { JwtToken } from "../types/jsonwebtoken/type";
+import User from "../models/user.model.js";
+import { JwtToken } from "../types/jsonwebtoken/type.js";
 
 
 

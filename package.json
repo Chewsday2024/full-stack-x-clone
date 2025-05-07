@@ -2,6 +2,7 @@
   "name": "x-clone",
   "version": "1.0.0",
   "main": "backend/dist/server.js",
+  "type": "module",
   "scripts": {
     "dev": "cross-env NODE_ENV=development ts-node-dev --files backend/server.ts",
     "build": "npm install && npm install --prefix frontend && tsc && npm run build --prefix frontend",
