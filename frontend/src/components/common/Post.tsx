@@ -89,7 +89,7 @@ function Post({ post }: { post: PostType}) {
 
       // instead, update the cache directly for that post
       queryClient.setQueryData(["posts"], ( oldData: PostType[] ) => {
-        return oldData.map( p => {
+        return oldData?.map( p => {
           if (p._id === post._id) {
             return { ...p, likes: updatedLikes }
           }
