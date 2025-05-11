@@ -295,7 +295,7 @@ function Post({ post }: { post: PostType}) {
                 <span className='text-sm text-slate-500 group-hover:text-green-500'>0</span>
               </div>
 
-              <div className='flex gap-1 items-center group cursor-pointer' onClick={handleLikePost}>
+              <button className='flex gap-1 items-center group cursor-pointer' onClick={handleLikePost}>
                 {isLiking && <LoadingSpinner size='sm' />}
 
                 {!isLiked && !isLiking && (
@@ -313,7 +313,7 @@ function Post({ post }: { post: PostType}) {
                 >
                   {post.likes.length}
                 </span>
-              </div>
+              </button>
             </div>
 
             <div className='flex w-1/3 justify-end gap-2 items-center'>
