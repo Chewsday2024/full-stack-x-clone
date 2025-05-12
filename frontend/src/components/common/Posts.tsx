@@ -45,7 +45,7 @@ function Posts({ feedType, username, userId }: Props) {
     refetch,
     isRefetching,
   } = useQuery({
-    queryKey: ["posts", POST_ENDPOINT],
+    queryKey: ["posts"],
     queryFn: () => postsQueryOption(POST_ENDPOINT),
   })
 
